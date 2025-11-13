@@ -1,58 +1,60 @@
+from typing import Optional
+
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-from config.links import Links
-from base.base_page import BasePage
+from pages.base_page import BasePage
 
-PAGE_URL = Links.LOGIN_PAGE
-LOGIN_FIELD = (
-    By.XPATH,
-    "//*[@data-featuretarget='login']//input[@type='text']"
-)
-PASSWORD_FIELD = (
-    By.XPATH,
-    "//input[@type='password']"
-)
-SUBMIT_BUTTON = (
-    By.XPATH,
-    "//*[@data-featuretarget='login']//button"
-)
-LOGIN_FAILED_ELEMENT = (
-    By.XPATH,
-    "//div[contains(text(), 'Пожалуйста, проверьте')]"
-)
-FAILED_LOGIN_TEXT = (
-    "Пожалуйста, "
-    "проверьте свой пароль и имя "
-    "аккаунта и попробуйте снова."
-)
+
+class LoginPageLocators:
+    LOGIN_INPUT = (
+        By.XPATH,
+        "//*[@data-featuretarget='login']//input[@type='text']"
+    )
+    PASSWORD_INPUT = (
+        By.XPATH,
+        "//input[@type='password']"
+    )
+    LOGIN_BTN = (
+        By.XPATH,
+        "//*[@data-featuretarget='login']//button"
+    )
+    INVALID_CREDENTIALS_ERROR = (
+        By.XPATH,
+        "//*[contains(@class, '_1W_6HXiG4JJ0By1qN_0fGZ')]"
+    )
 
 
 class LoginPage(BasePage):
-    def __init__(self, driver):
-        super().__init__(driver)
+    PAGE_URL = "https://store.steampowered.com/login"
+    FAILED_LOGIN_TEXT = (
+        "Пожалуйста, "
+        "проверьте свой пароль и имя "
+        "аккаунта и попробуйте снова."
+    )
 
-    def open(self):
-        self.driver.get(PAGE_URL)
-
-    def enter_login(self, login):
-        self.wait.until(
-            EC.element_to_be_clickable(LOGIN_FIELD)
-        ).send_keys(login)
-
-    def enter_password(self, password):
-        self.wait.until(
-            EC.element_to_be_clickable(PASSWORD_FIELD)
-        ).send_keys(password)
-
-    def click_submit_button(self):
-        self.wait.until(
-            EC.element_to_be_clickable(SUBMIT_BUTTON)
-        ).click()
-
-    def login_error_displayed(self):
-        self.wait.until(
-            EC.text_to_be_present_in_element(
-                LOGIN_FAILED_ELEMENT, FAILED_LOGIN_TEXT
+    def login(self, username: Optional[str] = None, password: Optional[str] = None):
+        if username:
+            self.fill_form(
+                selector=LoginPageLocators.LOGIN_INPUT,
+                value=username
             )
-        )
+        if password:
+            self.fill_form(
+                selector=LoginPageLocators.PASSWORD_INPUT,
+                value=password
+            )
+        self.click(LoginPageLocators.LOGIN_BTN)
+
+    def is_login_error_present(self) -> bool:
+        try:
+            self.wait.until(
+                EC.text_to_be_present_in_element(
+                    LoginPageLocators.INVALID_CREDENTIALS_ERROR,
+                    self.FAILED_LOGIN_TEXT
+                )
+            )
+            return True
+        except TimeoutException:
+            return False
