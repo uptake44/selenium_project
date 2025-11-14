@@ -2,10 +2,6 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-from pages.base_page import BasePage
-from pages.login_page import LoginPage
-from pages.main_page import MainPage
-
 
 @pytest.fixture()
 def driver():
@@ -18,13 +14,3 @@ def driver():
     driver = webdriver.Chrome(options=options)
     yield driver
     driver.quit()
-
-
-@pytest.fixture()
-def main_page(driver) -> MainPage:
-    return MainPage(driver)
-
-
-@pytest.fixture()
-def login_page(driver) -> LoginPage:
-    return LoginPage(driver)
