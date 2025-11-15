@@ -20,7 +20,7 @@ class LoginPage(BasePage):
         By.XPATH,
         "//*[@data-featuretarget='login']//button"
     )
-    INVALID_CREDENTIALS_ERROR = (
+    ERROR_ELEMENT = (
         By.XPATH,
         "//div[contains(@class, 'tool-tip-source')]/following::div[2]"
     )
@@ -55,14 +55,15 @@ class LoginPage(BasePage):
             ec.element_to_be_clickable(self.LOGIN_BTN)
         ).click()
 
-    def is_error_present(self, error_text: str) -> bool:
+    def get_error_text(self) -> str | None:
+        self.wait.until(
+            lambda d: d.find_element(
+                *self.ERROR_ELEMENT
+            ).text.strip() != ""
+        )
         try:
-            self.wait.until(
-                ec.text_to_be_present_in_element(
-                    self.INVALID_CREDENTIALS_ERROR,
-                    error_text
-                )
-            )
-            return True
+            return self.wait.until(
+                ec.presence_of_element_located(self.ERROR_ELEMENT)
+            ).text
         except TimeoutException:
-            return False
+            return None
