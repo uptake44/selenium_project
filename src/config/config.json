@@ -1,0 +1,9 @@
+{
+  "base_url": "https://store.steampowered.com/",
+  "options": [
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "--window-size=1920,1080"
+  ],
+  "timeout": 15
+}

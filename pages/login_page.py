@@ -55,6 +55,10 @@ class LoginPage(BasePage):
             ec.element_to_be_clickable(self.LOGIN_BTN)
         ).click()
 
+        self.wait.until(
+            ec.element_to_be_clickable(self.LOGIN_BTN)
+        )
+
     def get_error_text(self) -> str | None:
         self.wait.until(
             lambda d: d.find_element(
