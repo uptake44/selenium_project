@@ -1,14 +1,10 @@
 import pytest
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
-from src.config.config_reader import ConfigReader
+from src.drivers.chrome_driver import ChromeDriver
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def driver():
-    options = Options()
-    options.add_argument(ConfigReader.get_options())
-    driver = webdriver.Chrome(options=options)
-    yield driver
-    driver.quit()
+    browser = ChromeDriver()
+    yield browser
+    ChromeDriver.quit_driver()

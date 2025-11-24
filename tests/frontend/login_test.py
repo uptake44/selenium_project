@@ -26,7 +26,10 @@ def test_login_error(driver, expected_error: str):
     login_page = LoginPage(driver)
 
     driver.get(ConfigReader.get_url())
+    assert main_page.is_page_opened(), "Главная страница не открылась"
+
     main_page.click_login_button()
+    assert login_page.is_page_opened(), "Страница логина не открылась"
 
     login_page.login(
         username=fake.user_name(),

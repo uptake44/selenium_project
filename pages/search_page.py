@@ -1,9 +1,10 @@
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.base_page import BasePage
+from src.config.config_reader import ConfigReader
 
 
 class SearchPage(BasePage):
@@ -27,6 +28,18 @@ class SearchPage(BasePage):
         By.XPATH,
         "//div[contains(@class, 'search_price_discount_combined')]"
     )
+    LOADING_ELEMENT = (
+        By.XPATH,
+        "//*[@id='search_result_container' and contains(@style, 'opacity')]"
+    )
+
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.wait = WebDriverWait(
+            driver,
+            ConfigReader.get_timeout(),
+            ConfigReader.get_poll_frequency()
+        )
 
     def is_page_opened(self):
         try:
@@ -50,11 +63,12 @@ class SearchPage(BasePage):
             ec.element_to_be_clickable(self.SORT_PRICE_DESC)
         ).click()
 
-        element = self.wait.until(
-            ec.presence_of_element_located(self.PRICE_ELEMENT)
-        )
         self.wait.until(
-            ec.staleness_of(element)
+            ec.presence_of_element_located(self.LOADING_ELEMENT)
+        )
+
+        self.wait.until_not(
+            ec.presence_of_element_located(self.LOADING_ELEMENT)
         )
 
     def get_item_price_list(self, value) -> list:

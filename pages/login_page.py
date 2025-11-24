@@ -1,5 +1,3 @@
-from typing import Optional
-
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -38,8 +36,8 @@ class LoginPage(BasePage):
 
     def login(
             self,
-            username: Optional[str] = None,
-            password: Optional[str] = None
+            username: str | None = None,
+            password: str | None = None
     ):
         if username:
             self.wait.until(
@@ -59,15 +57,15 @@ class LoginPage(BasePage):
             ec.element_to_be_clickable(self.LOGIN_BTN)
         )
 
-    def get_error_text(self) -> str | None:
+    def get_error_text(self) -> str:
         self.wait.until(
             lambda d: d.find_element(
                 *self.ERROR_ELEMENT
-            ).text.strip() != ""
+            ).text != ""
         )
         try:
             return self.wait.until(
                 ec.presence_of_element_located(self.ERROR_ELEMENT)
             ).text
         except TimeoutException:
-            return None
+            raise TimeoutException

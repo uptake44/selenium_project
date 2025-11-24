@@ -14,6 +14,8 @@ def test_click_login_button(driver):
     login_page = LoginPage(driver)
 
     driver.get(ConfigReader.get_url())
+    assert main_page.is_page_opened(), "Ошибка загрузки страницы"
+
     main_page.click_login_button()
 
     assert login_page.is_page_opened(), "Ошибка загрузки страницы"

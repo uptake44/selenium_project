@@ -1,5 +1,3 @@
-from typing import Optional
-
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -17,8 +15,8 @@ class MainPage(BasePage):
         "//a[contains(@class, 'global_action_link')]"
     )
     SEARCH_FIELD = (
-        By.NAME,
-        "term"
+        By.XPATH,
+        "//input[contains(@type, 'text')]"
     )
     SEARCH_BTN = (
         By.XPATH,
@@ -41,7 +39,7 @@ class MainPage(BasePage):
             ec.element_to_be_clickable(self.LOGIN_PAGE_BTN)
         ).click()
 
-    def search(self, value: Optional[str] = None):
+    def search(self, value: str | None = None):
         if value:
             self.wait.until(
                 ec.element_to_be_clickable(self.SEARCH_FIELD)

@@ -5,5 +5,10 @@
     "--disable-dev-shm-usage",
     "--window-size=1920,1080"
   ],
-  "timeout": 15
+  "timeout": 15,
+  "poll_frequency": 0.1,
+  "lang": [
+    "russian",
+    "english"
+  ]
 }
