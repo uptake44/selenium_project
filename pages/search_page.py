@@ -35,10 +35,10 @@ class SearchPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
-        self.wait = WebDriverWait(
-            driver,
+        self.wait_fast_freq = WebDriverWait(
+            self.driver,
             ConfigReader.get_timeout(),
-            ConfigReader.get_poll_frequency()
+            poll_frequency=ConfigReader.get_fast_poll_frequency()
         )
 
     def is_page_opened(self):
@@ -50,7 +50,8 @@ class SearchPage(BasePage):
         except TimeoutException:
             return False
 
-    def set_filters(self):
+    def set_filter_descending_price(self):
+
         self.wait.until(
             ec.element_to_be_clickable(self.SORT_BY_TRIGGER)
         ).click()
@@ -63,11 +64,11 @@ class SearchPage(BasePage):
             ec.element_to_be_clickable(self.SORT_PRICE_DESC)
         ).click()
 
-        self.wait.until(
+        self.wait_fast_freq.until(
             ec.presence_of_element_located(self.LOADING_ELEMENT)
         )
 
-        self.wait.until_not(
+        self.wait_fast_freq.until_not(
             ec.presence_of_element_located(self.LOADING_ELEMENT)
         )
 

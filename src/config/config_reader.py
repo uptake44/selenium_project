@@ -1,6 +1,11 @@
 import json
 from json import JSONDecodeError
 
+
+class ConfigError(Exception):
+    pass
+
+
 class ConfigReader:
     CONFIG_FILE = "./src/config/config.json"
     _data = None
@@ -12,9 +17,9 @@ class ConfigReader:
                 with open(cls.CONFIG_FILE) as f:
                     cls._data = json.load(f)
             except FileNotFoundError:
-                raise "Файл конфигурации не найден"
+                raise ConfigError("Файл конфигурации не найден")
             except JSONDecodeError:
-                raise "Ошибка чтения JSON"
+                raise ConfigError("Ошибка чтения JSON")
         return cls._data
 
     @classmethod
@@ -30,9 +35,13 @@ class ConfigReader:
         return cls._load().get("timeout")
 
     @classmethod
-    def get_poll_frequency(cls) -> int:
-        return cls._load().get("poll_frequency")
+    def get_fast_poll_frequency(cls) -> int:
+        return cls._load().get("fast_poll_frequency")
 
     @classmethod
     def get_languages(cls) -> list:
         return cls._load().get("lang")
+
+    @classmethod
+    def is_headless(cls) -> bool:
+        return cls._load().get("headless")

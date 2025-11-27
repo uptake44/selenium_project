@@ -63,9 +63,6 @@ class LoginPage(BasePage):
                 *self.ERROR_ELEMENT
             ).text != ""
         )
-        try:
-            return self.wait.until(
-                ec.presence_of_element_located(self.ERROR_ELEMENT)
-            ).text
-        except TimeoutException:
-            raise TimeoutException
+        return self.wait.until(
+            ec.presence_of_element_located(self.ERROR_ELEMENT)
+        ).text

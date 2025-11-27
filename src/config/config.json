@@ -6,9 +6,10 @@
     "--window-size=1920,1080"
   ],
   "timeout": 15,
-  "poll_frequency": 0.1,
+  "fast_poll_frequency": 0.1,
   "lang": [
-    "russian",
-    "english"
-  ]
+    "ru",
+    "en"
+  ],
+  "headless": false
 }

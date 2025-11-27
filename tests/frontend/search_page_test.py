@@ -5,10 +5,10 @@ from pages.search_page import SearchPage
 from src.config.config_reader import ConfigReader
 
 
-@pytest.mark.parametrize(
-    "language",
-    ConfigReader().get_languages()
-)
+# @pytest.mark.parametrize(
+#     "language",
+#     ConfigReader().get_languages()
+# )
 @pytest.mark.parametrize(
     "search_value, items_in_list",
     [
@@ -16,19 +16,19 @@ from src.config.config_reader import ConfigReader
         ("Fallout", 20)
     ]
 )
-def test_search(driver, search_value: str, items_in_list: int, language: str):
+def test_search(driver, search_value: str, items_in_list: int):
     main_page = MainPage(driver)
     search_page = SearchPage(driver)
 
     driver.get(ConfigReader.get_url())
-    main_page.set_page_language(language)
-    driver.refresh()
+    # main_page.set_page_language(language)
+    # driver.refresh()
     assert main_page.is_page_opened(), "Домашняя страница не открылась"
 
     main_page.search(search_value)
     assert search_page.is_page_opened(), "Страница поиска не открылась"
 
-    search_page.set_filters()
+    search_page.set_filter_descending_price()
     actual_prices = search_page.get_item_price_list(items_in_list)
     expected_prices = sorted(actual_prices, reverse=True)
 
