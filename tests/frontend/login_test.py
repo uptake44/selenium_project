@@ -3,23 +3,24 @@ from faker import Faker
 
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
-from src.config.config_reader import ConfigReader
+from src.config.config_reader import ConfigReader, Language
 
 PASSWORD_LENGTH = 8
 fake = Faker()
 
 
 @pytest.mark.parametrize(
-    "expected_error",
+    "expected_error, language",
     [
         ("Пожалуйста, проверьте свой "
          "пароль и имя аккаунта "
-         "и попробуйте снова."),
+         "и попробуйте снова.", Language.RUS),
 
         ("Please check your "
          "password and account name "
-         "and try again.")
-    ]
+         "and try again.", Language.ENG)
+    ],
+    indirect=["language"]
 )
 def test_login_error(driver, expected_error: str):
     main_page = MainPage(driver)

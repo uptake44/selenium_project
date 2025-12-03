@@ -9,6 +9,7 @@ def test_navigate_to_main_page(driver):
     driver.get(ConfigReader.get_url())
     assert main_page.is_page_opened(), "Ошибка загрузки страницы"
 
+
 def test_click_login_button(driver):
     main_page = MainPage(driver)
     login_page = LoginPage(driver)

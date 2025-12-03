@@ -1,6 +1,13 @@
 import json
 from json import JSONDecodeError
+from enum import StrEnum
 
+class Language(StrEnum):
+    ENG = "english"
+    RUS = "russian"
+
+    def __str__(self):
+        return self.value
 
 class ConfigError(Exception):
     pass
@@ -24,7 +31,7 @@ class ConfigReader:
 
     @classmethod
     def get_options(cls) -> str:
-        return ' '.join(cls._load().get("options"))
+        return cls._load().get("options")
 
     @classmethod
     def get_url(cls) -> str:
@@ -45,3 +52,7 @@ class ConfigReader:
     @classmethod
     def is_headless(cls) -> bool:
         return cls._load().get("headless")
+
+    @classmethod
+    def get_lang_cookie(cls) -> str:
+        return cls._load().get("language_cookie")
