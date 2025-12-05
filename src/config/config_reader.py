@@ -2,12 +2,11 @@ import json
 from json import JSONDecodeError
 from enum import StrEnum
 
-class Language(StrEnum):
-    ENG = "english"
-    RUS = "russian"
 
-    def __str__(self):
-        return self.value
+class Language(StrEnum):
+    ENG = "en"
+    RUS = "ru"
+
 
 class ConfigError(Exception):
     pass
@@ -30,7 +29,7 @@ class ConfigReader:
         return cls._data
 
     @classmethod
-    def get_options(cls) -> str:
+    def get_options(cls) -> list:
         return cls._load().get("options")
 
     @classmethod

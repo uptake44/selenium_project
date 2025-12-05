@@ -7,18 +7,19 @@ from src.config.config_reader import ConfigReader
 class ChromeDriver:
     _driver = None
 
-    def __new__(cls):
+    def __new__(cls, language):
         if cls._driver is None:
-            cls._driver = cls._get_driver()
+            cls._driver = cls._get_driver(language)
         return cls._driver
 
     @classmethod
-    def _get_driver(cls) -> webdriver.Chrome:
+    def _get_driver(cls, language) -> webdriver.Chrome:
         options = Options()
         if ConfigReader.is_headless():
             options.add_argument("--headless=new")
         for opt in ConfigReader.get_options():
             options.add_argument(opt)
+        options.add_argument(f"--lang={language}")
         return webdriver.Chrome(options=options)
 
     @classmethod

@@ -13,16 +13,18 @@ def language(request):
 
 @pytest.fixture()
 def driver(language):
-    browser = ChromeDriver()
+    browser = ChromeDriver(language)
 
-    browser.get(ConfigReader.get_url())
-
-    browser.delete_cookie(ConfigReader.get_lang_cookie())
-
-    browser.add_cookie({
-        "name": ConfigReader.get_lang_cookie(),
-        "value": language,
-    })
+    # browser.get(ConfigReader.get_url())
+    #
+    # browser.delete_cookie(ConfigReader.get_lang_cookie())
+    #
+    # browser.add_cookie(
+    #     {
+    #         "name": ConfigReader.get_lang_cookie(),
+    #         "value": language,
+    #     }
+    # )
 
     yield browser
     ChromeDriver.quit_driver()
